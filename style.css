@@ -1,0 +1,184 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #ff6a00 0%, #ee0979 50%, #00c3ff 100%);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: bgmove 10s cubic-bezier(0.77,0,0.175,1) infinite alternate;
+    background-size: 200% 200%;
+}
+
+@keyframes bgmove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    background: rgba(255,255,255,0.97);
+    padding: 2.5rem 2.8rem;
+    border-radius: 22px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    width: 370px;
+    border: 2px solid #ee0979;
+    position: relative;
+    overflow: hidden;
+    animation: popin 1.1s cubic-bezier(0.68,-0.55,0.27,1.55);
+    transition: box-shadow 0.4s cubic-bezier(0.77,0,0.175,1);
+}
+
+@keyframes popin {
+    0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
+    60% { transform: scale(1.05) rotate(2deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 120px; height: 120px;
+    background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
+    border-radius: 50%;
+    opacity: 0.18;
+    z-index: 0;
+    animation: floatblob 6s ease-in-out infinite alternate;
+}
+
+@keyframes floatblob {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(30px) scale(1.1); }
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #ee0979;
+    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 2rem;
+    z-index: 1;
+    position: relative;
+}
+
+form {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    animation: formfadein 1.2s 0.2s cubic-bezier(0.77,0,0.175,1) forwards;
+    z-index: 1;
+    position: relative;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+@keyframes formfadein {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+    z-index: 1;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #ff6a00;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid #ee0979;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    box-sizing: border-box;
+    background: #f7f7fa;
+    transition: border 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border: 1.5px solid #ff6a00;
+    box-shadow: 0 0 0 2px #ffb34744;
+}
+
+button {
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(90deg, #ee0979 0%, #ff6a00 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    box-shadow: 0 2px 8px rgba(238,9,121,0.08);
+    transition: background 0.2s, transform 0.15s, box-shadow 0.3s cubic-bezier(0.77,0,0.175,1);
+    letter-spacing: 0.5px;
+    animation: btnpop 0.8s 0.7s cubic-bezier(0.77,0,0.175,1) backwards;
+}
+
+@keyframes btnpop {
+    0% { transform: scale(0.7); opacity: 0; }
+    80% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+button:hover {
+    background: linear-gradient(90deg, #ff6a00 0%, #ee0979 100%);
+    transform: translateY(-2px) scale(1.07) rotate(-1deg);
+    box-shadow: 0 6px 18px rgba(255,106,0,0.13);
+}
+
+.toggle-link {
+    display: block;
+    text-align: center;
+    margin-top: 1.2rem;
+    color: #00c3ff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s, letter-spacing 0.3s cubic-bezier(0.77,0,0.175,1);
+    letter-spacing: 0.2px;
+    animation: linkfade 1.2s 0.8s cubic-bezier(0.77,0,0.175,1) backwards;
+}
+
+@keyframes linkfade {
+    0% { opacity: 0; letter-spacing: 2px; }
+    100% { opacity: 1; letter-spacing: 0.2px; }
+}
+
+.toggle-link:hover {
+    color: #ee0979;
+    letter-spacing: 2px;
+}
+
+.success-message {
+    color: #27ae60;
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.error-message {
+    color: #e74c3c;
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
