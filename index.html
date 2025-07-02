@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome My Love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at 60% 40%, #ffe0e9 0%, #ffb6c1 100%);
+            font-family: 'Quicksand', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .heart-btn {
+            width: 150px;
+            height: 140px;
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 2em;
+            transition: transform 0.2s;
+            z-index: 2;
+        }
+        .heart-btn:active {
+            transform: scale(0.93);
+        }
+        .heart-shape {
+            width: 150px;
+            height: 140px;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 2;
+            animation: pulse 1.2s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 2px 12px #e75480cc); }
+            100% { transform: scale(1.08); filter: drop-shadow(0 8px 32px #e75480cc); }
+        }
+        .heart-shape svg {
+            width: 100%;
+            height: 100%;
+        }
+        .open-letter {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(120deg, #ffe0e9cc 0%, #ffb6c1cc 100%);
+            z-index: 100;
+            animation: fadeIn 0.7s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .envelope {
+            width: 98vw;
+            max-width: 480px;
+            min-width: 300px;
+            min-height: 370px;
+            height: auto;
+            padding-top: 3.2em;
+            padding-bottom: 3.2em;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 8px 32px #e7548033, 0 2px 16px #fff6;
+            position: relative;
+            overflow: visible;
+            margin-bottom: 1.5em;
+            animation: popin 1s cubic-bezier(0.77,0,0.175,1);
+        }
+        @keyframes popin {
+            0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
+            60% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .envelope-flap {
+            position: absolute;
+            top: -22vw;
+            left: 0;
+            width: 90vw;
+            max-width: 320px;
+            min-width: 220px;
+            height: 22vw;
+            max-height: 90px;
+            min-height: 40px;
+            background: linear-gradient(120deg, #ffb6c1 0%, #e75480 100%);
+            border-radius: 0 0 150px 150px/0 0 90px 90px;
+            z-index: 2;
+            transform-origin: bottom center;
+            transition: transform 0.7s cubic-bezier(0.77,0,0.175,1);
+            box-shadow: 0 2px 16px #e7548033;
+        }
+        .envelope.open .envelope-flap {
+            transform: rotateX(120deg);
+        }
+        .letter-content {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.7s, max-height 0.7s;
+            text-align: center;
+            padding: 0 0.5em;
+            font-size: 1.05rem;
+        }
+        .envelope.open .letter-content {
+            opacity: 1;
+            max-height: 300px;
+            transition-delay: 0.5s;
+        }
+        .flowers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1em 0 0.5em 0;
+            opacity: 0;
+            transition: opacity 0.7s 0.7s;
+        }
+        .envelope.open .flowers {
+            opacity: 1;
+        }
+        .flower {
+            font-size: 2.2rem;
+            margin: 0.2em 0.3em;
+            filter: drop-shadow(0 2px 8px #e75480cc);
+            animation: flowerpop 0.7s cubic-bezier(0.77,0,0.175,1);
+        }
+        @keyframes flowerpop {
+            0% { transform: scale(0.2) rotate(-30deg); opacity: 0; }
+            80% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .open-btn {
+            margin-top: 1.2em;
+            background: linear-gradient(90deg, #e75480 0%, #ffb6c1 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.7em 2em;
+            font-size: 1.1rem;
+            font-family: 'Quicksand', Arial, sans-serif;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 2px 8px #e7548033;
+            transition: background 0.2s;
+            width: 90vw;
+            max-width: 220px;
+        }
+        .open-btn:hover {
+            background: linear-gradient(90deg, #ffb6c1 0%, #e75480 100%);
+        }
+        .petals {
+            position: fixed;
+            pointer-events: none;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 999;
+        }
+        .petal {
+            position: absolute;
+            font-size: 2.2rem;
+            opacity: 0.85;
+            filter: drop-shadow(0 2px 8px #e75480cc);
+            animation: fall 3.5s linear forwards;
+            pointer-events: none;
+        }
+        @media (max-width: 600px) {
+            .heart-btn {
+                width: 110px;
+                height: 100px;
+            }
+            .heart-shape {
+                width: 110px;
+                height: 100px;
+            }
+            .envelope {
+                width: 99vw;
+                min-width: 0;
+                max-width: 99vw;
+                min-height: 220px;
+                max-width: 99vw;
+                padding-top: 1.2em;
+                padding-bottom: 1.2em;
+            }
+            .envelope-flap {
+                width: 99vw;
+                min-width: 0;
+                max-width: 99vw;
+                height: 18vw;
+                min-height: 24px;
+                max-height: 44px;
+            }
+            .open-btn {
+                width: 99vw;
+                min-width: 0;
+                max-width: 99vw;
+                font-size: 1rem;
+            }
+            .letter-content {
+                font-size: 0.97rem;
+            }
+            .signature {
+                font-size: 1.05em !important;
+            }
+            h2 {
+                font-size: 1.1em !important;
+                margin-top: 1.1em !important;
+            }
+        }
+        @keyframes fall {
+            0% { transform: translateY(-60px) scale(0.7) rotate(-20deg); opacity: 0.7; }
+            60% { opacity: 1; }
+            100% { transform: translateY(100vh) scale(1.1) rotate(20deg); opacity: 0; }
+        }
+        /* Floating hearts background */
+        .floating-hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .floating-heart {
+            position: absolute;
+            bottom: 100%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.8;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        /* Sparkle overlay */
+        .sparkle-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+            background: radial-gradient(circle, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 20%, rgba(255,255,255,0) 40%);
+            animation: sparkle 1.5s infinite;
+        }
+        @keyframes sparkle {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated floating hearts background -->
+    <div class="floating-hearts-bg" id="floatingHeartsBg"></div>
+    <!-- Sparkle overlay -->
+    <div class="sparkle-overlay" id="sparkleOverlay"></div>
+    <button class="heart-btn" id="heartBtn" aria-label="Open Letter">
+        <span class="heart-shape">
+            <svg viewBox="0 0 110 100">
+                <defs>
+                    <radialGradient id="heartGradient" cx="50%" cy="50%" r="80%">
+                        <stop offset="0%" stop-color="#fff6"/>
+                        <stop offset="60%" stop-color="#e75480"/>
+                        <stop offset="100%" stop-color="#b23a48"/>
+                    </radialGradient>
+                </defs>
+                <path d="M55 90 Q10 60 25 35 Q40 10 55 30 Q70 10 85 35 Q100 60 55 90 Z" fill="url(#heartGradient)" stroke="#fff" stroke-width="3"/>
+            </svg>
+        </span>
+    </button>
+    <div class="open-letter" id="openLetter">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="letter-content">
+                <h2 style="font-family:'Pacifico',cursive;color:#e75480;margin-top:1.7em;">My Dearest Wife</h2>
+                <div style="color:#b23a48;font-size:1.1rem;">You are my everything. Thank you for filling my life with love, laughter, and happiness.<br> I love you more than words can say! 💖</div>
+                <div class="signature" style="margin-top:1.2em;font-family:'Pacifico',cursive;color:#e75480;font-size:1.2em;">Forever Yours,<br><span style="font-size:1.3em;">Ishaan</span></div>
+                <div class="animated-divider" style="margin:1.2em 0 0.5em 0;text-align:center;">
+                    <svg width="120" height="18" viewBox="0 0 120 18">
+                        <path d="M10 9 Q30 0 60 9 Q90 18 110 9" stroke="#e75480" stroke-width="2.5" fill="none"/>
+                        <circle cx="60" cy="9" r="3.5" fill="#e75480"/>
+                    </svg>
+                </div>
+            </div>
+            <!-- No flowers inside, more animation below -->
+        </div>
+        <div style="height: 6em;"></div>
+        <button class="open-btn" id="continueBtn" style="margin-bottom: 2.5em;">Continue</button>
+    </div>
+    <div class="petals" id="petals"></div>
+    <div class="hearts" id="hearts"></div>
+    <script>
+        const heartBtn = document.getElementById('heartBtn');
+        const openLetter = document.getElementById('openLetter');
+        const envelope = document.getElementById('envelope');
+        const continueBtn = document.getElementById('continueBtn');
+        const petals = document.getElementById('petals');
+        const PETAL_EMOJIS = ['🌸','🌷','🌹','🌺','🌻','🌼','💐'];
+        const HEART_EMOJIS = ['💖','💗','💓','💞','💕','❤️','🩷'];
+        const hearts = document.getElementById('hearts');
+        // Floating hearts background
+        const floatingHeartsBg = document.getElementById('floatingHeartsBg');
+        function createFloatingHeart() {
+            const heart = document.createElement('span');
+            heart.textContent = HEART_EMOJIS[Math.floor(Math.random()*HEART_EMOJIS.length)];
+            heart.style.position = 'absolute';
+            heart.style.left = Math.random()*100 + 'vw';
+            heart.style.top = (90 + Math.random()*10) + 'vh';
+            heart.style.fontSize = (1.2 + Math.random()*1.8) + 'rem';
+            heart.style.opacity = 0.45 + Math.random()*0.25;
+            heart.style.pointerEvents = 'none';
+            heart.style.transition = 'transform 8s linear, opacity 8s linear';
+            floatingHeartsBg.appendChild(heart);
+            setTimeout(()=>{
+                heart.style.transform = `translateY(-110vh) scale(${0.8+Math.random()*0.7})`;
+                heart.style.opacity = 0;
+            }, 30);
+            setTimeout(()=>heart.remove(), 8000);
+        }
+        setInterval(createFloatingHeart, 1200);
+        // Sparkle overlay
+        const sparkleOverlay = document.getElementById('sparkleOverlay');
+        function createSparkle() {
+            const sparkle = document.createElement('span');
+            sparkle.textContent = '✨';
+            sparkle.style.position = 'absolute';
+            sparkle.style.left = Math.random()*100 + 'vw';
+            sparkle.style.top = Math.random()*100 + 'vh';
+            sparkle.style.fontSize = (0.7 + Math.random()*1.2) + 'rem';
+            sparkle.style.opacity = 0.5 + Math.random()*0.4;
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.transition = 'opacity 2.2s linear';
+            sparkleOverlay.appendChild(sparkle);
+            setTimeout(()=>{
+                sparkle.style.opacity = 0;
+            }, 1200);
+            setTimeout(()=>sparkle.remove(), 2200);
+        }
+        setInterval(createSparkle, 400);
+        function createPetal() {
+            const petal = document.createElement('span');
+            petal.className = 'petal';
+            petal.textContent = PETAL_EMOJIS[Math.floor(Math.random()*PETAL_EMOJIS.length)];
+            petal.style.left = Math.random()*100 + 'vw';
+            petal.style.fontSize = (1.7 + Math.random()*1.5) + 'rem';
+            petals.appendChild(petal);
+            setTimeout(()=>petal.remove(), 3500);
+        }
+        function createHeartBurst() {
+            for(let i=0;i<18;i++) {
+                setTimeout(()=>{
+                    const heart = document.createElement('span');
+                    heart.className = 'petal';
+                    heart.textContent = HEART_EMOJIS[Math.floor(Math.random()*HEART_EMOJIS.length)];
+                    heart.style.left = '50vw';
+                    heart.style.top = '60vh';
+                    // Increase heart size here:
+                    heart.style.fontSize = (3.5 + Math.random()*2.2) + 'rem';
+                    heart.style.opacity = '0.97';
+                    heart.style.position = 'fixed';
+                    heart.style.transition = 'transform 1.2s cubic-bezier(0.77,0,0.175,1), opacity 1.2s';
+                    hearts.appendChild(heart);
+                    setTimeout(()=>{
+                        const angle = Math.random()*2*Math.PI;
+                        const dist = 180 + Math.random()*80;
+                        // Make the burst scale a bit larger too
+                        heart.style.transform = `translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px) scale(1.7)`;
+                        heart.style.opacity = '0';
+                    },30);
+                    setTimeout(()=>heart.remove(), 1400);
+                }, i*60);
+            }
+        }
+        heartBtn.addEventListener('click', () => {
+            openLetter.style.display = 'flex';
+            setTimeout(() => envelope.classList.add('open'), 200);
+            // Start petals falling
+            for(let i=0;i<22;i++) setTimeout(createPetal, i*120);
+            // Heart burst from center
+            setTimeout(createHeartBurst, 600);
+        });
+        continueBtn.addEventListener('click', () => {
+            window.location.href = 'kisses.html';
+        });
+    </script>
+</body>
+</html>

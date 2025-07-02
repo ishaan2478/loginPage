@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kisses Animation</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(120deg, #ffb6c1 0%, #ffe0e9 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+        .kiss {
+            position: absolute;
+            will-change: transform, opacity;
+            pointer-events: none;
+            font-size: 32px;
+            opacity: 0.85;
+            filter: drop-shadow(0 2px 8px #e75480cc);
+            transition: filter 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Use real Unicode emoji codes for kisses
+        const KISS_EMOJIS = ['618', '48b', '970', '61a'];
+        function randomBetween(a, b) {
+            return Math.random() * (b - a) + a;
+        }
+        function createKiss() {
+            const kiss = document.createElement('span');
+            kiss.className = 'kiss';
+            // Pick a random emoji
+            kiss.textContent = String.fromCodePoint(
+                parseInt(KISS_EMOJIS[Math.floor(Math.random() * KISS_EMOJIS.length)].replace(/^\\u/, ''), 16)
+            );
+            // Start at random x, random y offscreen (bottom area)
+            const startX = randomBetween(0, window.innerWidth);
+            const startY = randomBetween(window.innerHeight * 0.7, window.innerHeight * 0.95);
+            kiss.style.left = `${startX}px`;
+            kiss.style.top = `${startY}px`;
+            kiss.style.transform = 'scale(0.5)';
+            document.body.appendChild(kiss);
+
+            // Animate towards center of screen, getting bigger
+            setTimeout(() => {
+                kiss.style.transition = 'transform 2.2s cubic-bezier(0.77,0,0.175,1), opacity 2.2s';
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                kiss.style.left = `${centerX - 32}px`;
+                kiss.style.top = `${centerY - 32}px`;
+                kiss.style.transform = 'scale(2.5)';
+                kiss.style.opacity = '0';
+            }, 30);
+
+            // Remove after animation
+            setTimeout(() => {
+                kiss.remove();
+            }, 2400);
+        }
+        setInterval(createKiss, 220);
+        // Initial burst
+        for (let i = 0; i < 8; i++) setTimeout(createKiss, i * 120);
+    </script>
+</body>
+</html>

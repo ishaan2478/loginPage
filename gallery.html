@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Beautiful Wife | Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at 60% 40%, #ffe0e9 0%, #ffb6c1 100%) fixed;
+            font-family: 'Quicksand', Arial, sans-serif;
+            display: block;
+            overflow: hidden;
+            height: 100vh;
+        }
+        .gallery-title {
+            font-family: 'Pacifico', cursive;
+            color: #e75480;
+            font-size: 2.1rem;
+            margin-bottom: 0.1em;
+            margin-top: 1.2em;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 16px #fff8, 0 2px 8px #e75480cc;
+            text-align: center;
+        }
+        .carousel-gallery {
+            width: 370px;
+            height: 270px;
+            position: relative;
+            margin: 3.2em auto 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+        .carousel-img {
+            width: 220px;
+            height: 320px;
+            border-radius: 32px;
+            object-fit: cover;
+            border: 6px solid #e75480;
+            box-shadow: 0 2px 16px #e7548033;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.7);
+            opacity: 0.5;
+            z-index: 1;
+            background: #fff;
+            transition: transform 0.55s cubic-bezier(0.77,0,0.175,1), opacity 0.4s, box-shadow 0.3s;
+        }
+        .carousel-img.center {
+            transform: translate(-50%, -50%) scale(1.08);
+            opacity: 1;
+            z-index: 3;
+            box-shadow: 0 12px 40px #e75480cc;
+        }
+        .carousel-img.left, .carousel-img.right {
+            opacity: 0.8;
+            z-index: 2;
+        }
+        .carousel-img.left {
+            transform: translate(-120%, -50%) scale(0.85) rotateY(10deg);
+        }
+        .carousel-img.right {
+            transform: translate(20%, -50%) scale(0.85) rotateY(-10deg);
+        }
+        .carousel-img.hide {
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .gallery-nav {
+            display: flex;
+            justify-content: center;
+            gap: 2em;
+            margin: 0.1em 0 0.2em 0;
+            position: relative;
+            top: 0.7em;
+        }
+        .gallery-btn {
+            background: linear-gradient(90deg, #e75480 60%, #ffb6c1 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 2em;
+            box-shadow: 0 2px 12px #e7548033;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.13s;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+        .gallery-btn:active {
+            transform: scale(0.93);
+        }
+        .footer {
+            margin-top: 3em;
+            color: #e75480;
+            font-size: 1rem;
+            opacity: 0.7;
+            font-family: 'Quicksand', Arial, sans-serif;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .carousel-gallery { width: 99vw; height: 220px; }
+            .carousel-img {
+                width: 120px;
+                height: 180px;
+                border-width: 4px;
+                border-radius: 18px;
+            }
+            .carousel-img.left {
+                transform: translate(-120%, -50%) scale(0.9) rotateY(10deg);
+            }
+            .carousel-img.right {
+                transform: translate(20%, -50%) scale(0.9) rotateY(-10deg);
+            }
+            .gallery-title { font-size: 1.2rem; }
+            .gallery-btn { width: 36px; height: 36px; font-size: 1.3em; }
+        }
+    </style>
+</head>
+<body>
+    <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:0.2em;">
+        <div class="gallery-title">My Favorite Moments With You 💖</div>
+        <div class="gallery-nav">
+            <button class="gallery-btn" id="leftBtn" aria-label="Left">&#8592;</button>
+            <button class="gallery-btn" id="rightBtn" aria-label="Right">&#8594;</button>
+        </div>
+    </div>
+    <div class="carousel-gallery" id="carouselGallery"></div>
+    <div class="footer">You are my world, my love!<br>, --Pyaari Sakshi🤗</div>
+    <script>
+        // Updated image URLs (user provided)
+        const images = [
+            'https://scontent.fccu27-2.fna.fbcdn.net/v/t1.15752-9/500458217_691403570460383_444549123710018435_n.jpg?stp=dst-jpg_s640x640_tt6&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=5lfiChKvnXAQ7kNvwHfWxS0&_nc_oc=AdnULbHVlvKMQBHnN3XBgfJaTp-gl0SBb6Fcs3OsfokL_RuHWExnxMdx6s0rSdzneq17MkA6D7L8iSB16ELSdU9F&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fccu27-2.fna&oh=03_Q7cD2gHHVcqzVmd7GP9sN0L5BOmnG8hUtMMzelkfGW1oH_tSsQ&oe=688BF1CB',
+            'https://scontent.fccu20-1.fna.fbcdn.net/v/t1.15752-9/501462297_2191468801288151_9146346838260878524_n.jpg?stp=dst-jpg_p2048x2048_tt6&_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=S9xcR2rG9G4Q7kNvwEXBEH6&_nc_oc=AdlkfJS2cvlGKPzD1V387FOkjY-GKIpz_dTs4OD7Upyu_rwxg2ZuUYk5COHBJpiUxEmjvWDNjZ8XWJOqKKKWo1LP&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fccu20-1.fna&oh=03_Q7cD2gGO7JK5OHhFu50mIR1HlUrnfWTx-F8YQFSbk_gVJuf98A&oe=688BF437',
+            'https://scontent.fccu11-1.fna.fbcdn.net/v/t1.15752-9/494825771_598381509365492_466002409798912644_n.jpg?stp=dst-jpg_s640x640_tt6&_nc_cat=103&ccb=1-7&_nc_sid=0024fc&_nc_ohc=etKJ_F71NbQQ7kNvwFThKhK&_nc_oc=AdmSYF0Ex8ujcgzpPEAMkFB5GvIDtiXQYhEdTc1AhIM3TxCFxBHThu8dNal8aK_zETFI-kpOJyIYyQ7OKvfzqNXK&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fccu11-1.fna&oh=03_Q7cD2gGn-5JhvSdHfHW_YKzwsGJ5ea1Bp0XR6-8jVegrZnniQQ&oe=688C16B0',
+            'https://scontent.fccu11-1.fna.fbcdn.net/v/t1.15752-9/495077256_1020336393643687_6993001002915321300_n.jpg?stp=dst-jpg_s552x414_tt6&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=OB-GDyJOwbkQ7kNvwHJ8oJ9&_nc_oc=AdmMN98zz9BRpor-Rwh9GQPlyzugnOq7T3XwPiAPgYH4h0xQG5R1383fy_-sjArAvdOm7cTGGohwEmuc5VptudWO&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fccu11-1.fna&oh=03_Q7cD2gEUjNufPlpjLMkY5fwME9uynos60ee61ovvrCPajErsmQ&oe=688C0817'
+        ];
+        const gallery = document.getElementById('carouselGallery');
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        let current = 0;
+        const n = images.length;
+
+        function renderGallery() {
+            gallery.innerHTML = '';
+            for (let i = 0; i < n; i++) {
+                const img = document.createElement('img');
+                img.src = images[i];
+                img.className = 'carousel-img';
+                if (i === current) {
+                    img.classList.add('center');
+                } else if (i === (current - 1 + n) % n) {
+                    img.classList.add('left');
+                } else if (i === (current + 1) % n) {
+                    img.classList.add('right');
+                } else {
+                    img.classList.add('hide');
+                }
+                gallery.appendChild(img);
+            }
+        }
+
+        renderGallery();
+
+        leftBtn.addEventListener('click', () => {
+            current = (current - 1 + n) % n;
+            renderGallery();
+        });
+        rightBtn.addEventListener('click', () => {
+            current = (current + 1) % n;
+            renderGallery();
+        });
+
+        // Touch/swipe support for mobile
+        let startX = null;
+        gallery.addEventListener('touchstart', e => {
+            if (e.touches.length === 1) startX = e.touches[0].clientX;
+        });
+        gallery.addEventListener('touchend', e => {
+            if (startX === null) return;
+            const endX = e.changedTouches[0].clientX;
+            if (endX - startX > 30) {
+                current = (current - 1 + n) % n;
+                renderGallery();
+            } else if (startX - endX > 30) {
+                current = (current + 1) % n;
+                renderGallery();
+            }
+            startX = null;
+        });
+
+        window.addEventListener('resize', renderGallery);
+    </script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Surprise | For My Wife</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at 60% 40%, #ffe0e9 0%, #ffb6c1 100%) fixed;
+            font-family: 'Quicksand', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Allow scrolling if content overflows */
+            overflow-x: hidden;
+            overflow-y: auto;
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
+        }
+        .puzzle-card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 28px;
+            box-shadow: 0 8px 32px #e7548033, 0 2px 16px #fff6;
+            padding: 2em 1.5em 2em 1.5em;
+            max-width: 350px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            margin-top: 1.2em;
+            position: relative;
+            animation: popin 1.1s cubic-bezier(0.77,0,0.175,1);
+        }
+        @keyframes popin {
+            0% { transform: scale(0.7) rotate(-8deg); opacity: 0; }
+            60% { transform: scale(1.08) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .puzzle-title {
+            font-family: 'Pacifico', cursive;
+            color: #e75480;
+            font-size: 2.1rem;
+            margin-bottom: 0.3em;
+            margin-top: 0.2em;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 16px #fff8, 0 2px 8px #e75480cc;
+        }
+        .game-outer-box {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px #e7548033;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2em auto 0.7em auto;
+            width: 100%;
+            max-width: 220px;
+        }
+        .puzzle-board {
+            display: grid;
+            grid-template-columns: repeat(3, 60px);
+            grid-template-rows: repeat(3, 60px);
+            gap: 6px;
+            justify-content: center;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px #e7548033;
+            margin-bottom: 1em;
+            width: 192px;
+        }
+        .jigsaw-piece {
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            cursor: grab;
+            z-index: 10;
+            user-select: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 2px 8px #e7548033;
+            -webkit-mask-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="60" height="60" rx="12" fill="white"/></svg>');
+            mask-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="60" height="60" rx="12" fill="white"/></svg>');
+            -webkit-mask-size: 60px 60px;
+            mask-size: 60px 60px;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            background-color: #fff;
+        }
+        .jigsaw-piece.dragging {
+            opacity: 0.7;
+            z-index: 99;
+            box-shadow: 0 8px 32px #e75480cc;
+        }
+        .jigsaw-drop {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            background: #f8f8f8;
+            border: none;
+            position: relative;
+            overflow: visible;
+        }
+        .jigsaw-drop.filled {
+            border: none;
+            background: transparent;
+        }
+        .jigsaw-pieces-tray {
+            min-height: 70px;
+            min-width: 200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 1.2em;
+            position: relative;
+        }
+        .tile.empty {
+            background: transparent;
+            box-shadow: none;
+            cursor: default;
+        }
+        .puzzle-message {
+            color: #b23a48;
+            font-size: 1.1rem;
+            margin-bottom: 1em;
+            font-family: 'Quicksand', Arial, sans-serif;
+        }
+        .footer {
+            margin-top: 2em;
+            color: #e75480;
+            font-size: 1rem;
+            opacity: 0.7;
+            font-family: 'Quicksand', Arial, sans-serif;
+        }
+        @media (max-width: 600px) {
+            .puzzle-card {
+                padding: 0.5em 0.1em 0.7em 0.1em;
+                max-width: 80vw;
+                border-radius: 12px;
+                box-shadow: 0 4px 16px #e7548033, 0 1px 8px #fff6;
+            }
+            .puzzle-title {
+                font-size: 1rem;
+            }
+            .game-outer-box {
+                padding: 0.5vw;
+                max-width: 70vw;
+            }
+            .puzzle-board {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+                gap: 1vw;
+                width: 70vw !important;
+                height: 70vw !important;
+                max-width: 72vw;
+                max-height: 72vw;
+                min-width: 0;
+                min-height: 0;
+            }
+            .jigsaw-piece, .jigsaw-drop {
+                width: 22vw !important;
+                height: 22vw !important;
+                min-width: 18px !important;
+                min-height: 18px !important;
+                max-width: 24vw !important;
+                max-height: 24vw !important;
+            }
+            .puzzle-board img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+                aspect-ratio: 1/1 !important;
+            }
+            .footer {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="puzzle-card">
+        <div class="puzzle-note" style="font-family:'Quicksand',Arial,sans-serif;color:#e75480;font-size:1.13rem;margin-bottom:0.7em;text-align:center;letter-spacing:0.5px;">apko ye pasand hai na<br>app ye try kriye jabse mee school me hoon 💝🤗</div>
+        <div class="puzzle-title">Sliding Puzzle Game</div>
+        <div class="puzzle-message">Swap the pieces by dragging one onto another to complete the picture!<br>All pieces are inside the box. Good luck! 💖</div>
+        <div class="game-outer-box">
+            <div class="puzzle-board" id="puzzleBoard"></div>
+        </div>
+        <div id="puzzleStatus" style="margin-top:1em;font-size:1.1em;color:#e75480;font-family:'Quicksand',Arial,sans-serif;"></div>
+    </div>
+    <div class="footer" id="congratsFooter" style="display:none;font-size:1.4em;color:#e75480;font-family:Pacifico,cursive;letter-spacing:1px;">congrats meri pyaari sakshi 🥰💖</div>
+    <div class="footer" id="normalFooter">You are amazing! Enjoy your surprise 💖</div>
+    <script>
+        // Jigsaw puzzle logic
+        const board = document.getElementById('puzzleBoard');
+        const statusDiv = document.getElementById('puzzleStatus');
+        const IMG_URL = 'https://scontent.fccu2-2.fna.fbcdn.net/v/t1.15752-9/502084395_1416378359359569_5225687789309071857_n.jpg?stp=dst-jpg_s640x640_tt6&_nc_cat=106&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Rc8tLwPjE5YQ7kNvwHBYny3&_nc_oc=Adn2_IIn2Ir0MrN0pLzUthYyzc0aYwp21GZxlU_mbElwiTtkqOLKcbxtEI6rJEG55xE&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fccu2-2.fna&oh=03_Q7cD2gHpmJXDhnrGq8Vmj6UXOV2dgLNpVChW6AShmpolSTwEIw&oe=688BA29F';
+        const SIZE = 3; // 3x3
+        const PIECE = 60; // px
+        // SVG jigsaw mask for each piece (simple, not interlocking for demo)
+        function getJigsawMask(row, col) {
+            // No need to return SVG, mask is applied via CSS
+            return '';
+        }
+        // Generate shuffled pieces
+        let pieces = [];
+        for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) pieces.push({row:r, col:c});
+        function shuffle(arr) {
+            let a = arr.slice();
+            for(let i=a.length-1;i>0;i--) {
+                let j = Math.floor(Math.random()*(i+1));
+                [a[i],a[j]]=[a[j],a[i]];
+            }
+            return a;
+        }
+        let shuffled = shuffle(pieces);
+        // Render board with shuffled pieces
+        function renderBoard() {
+            board.innerHTML = '';
+            let idx = 0;
+            for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) {
+                const drop = document.createElement('div');
+                drop.className = 'jigsaw-drop filled';
+                drop.dataset.row = r;
+                drop.dataset.col = c;
+                // Place a piece in each cell
+                const p = shuffled[idx++];
+                const div = document.createElement('div');
+                div.className = 'jigsaw-piece';
+                div.setAttribute('draggable','true');
+                div.style.backgroundImage = `url('${IMG_URL}')`;
+                div.style.backgroundSize = `${PIECE*SIZE}px ${PIECE*SIZE}px`;
+                div.style.backgroundPosition = `-${p.col*PIECE}px -${p.row*PIECE}px`;
+                div.dataset.row = p.row;
+                div.dataset.col = p.col;
+                div.innerHTML = getJigsawMask(p.row, p.col);
+                drop.appendChild(div);
+                board.appendChild(drop);
+            }
+            // Re-enable touch events after rendering
+            setTimeout(enableTouchOnPieces, 0);
+        }
+        renderBoard();
+        // Touch support for mobile
+        let touchDragging = null;
+        let touchOrigin = null;
+        let touchOffset = {x:0, y:0};
+        function onTouchStart(e) {
+            const piece = e.target.closest('.jigsaw-piece');
+            if (!piece) return;
+            e.preventDefault();
+            touchDragging = piece;
+            touchOrigin = piece.parentElement;
+            piece.classList.add('dragging');
+            const touch = e.touches[0];
+            const rect = piece.getBoundingClientRect();
+            touchOffset.x = touch.clientX - rect.left;
+            touchOffset.y = touch.clientY - rect.top;
+            piece.style.zIndex = 999;
+            piece.style.pointerEvents = 'none';
+            document.body.appendChild(piece);
+            moveTouchPiece(touch.clientX, touch.clientY);
+        }
+        function onTouchMove(e) {
+            if (!touchDragging) return;
+            const touch = e.touches[0];
+            moveTouchPiece(touch.clientX, touch.clientY);
+        }
+        function moveTouchPiece(x, y) {
+            if (!touchDragging) return;
+            touchDragging.style.position = 'fixed';
+            touchDragging.style.left = (x - touchOffset.x) + 'px';
+            touchDragging.style.top = (y - touchOffset.y) + 'px';
+        }
+        function onTouchEnd(e) {
+            if (!touchDragging) return;
+            touchDragging.classList.remove('dragging');
+            // Find drop target
+            let drop = null;
+            const changedTouch = (e.changedTouches && e.changedTouches[0]) || (e.touches && e.touches[0]);
+            if (changedTouch) {
+                const el = document.elementFromPoint(changedTouch.clientX, changedTouch.clientY);
+                drop = el && el.closest('.jigsaw-drop');
+            }
+            if (drop && drop !== touchOrigin) {
+                if (drop.children.length) {
+                    // Swap pieces
+                    const targetPiece = drop.children[0];
+                    touchOrigin.appendChild(targetPiece);
+                }
+                drop.appendChild(touchDragging);
+                touchDragging.style.position = 'static';
+                touchDragging.style.left = '';
+                touchDragging.style.top = '';
+                touchDragging.style.zIndex = '';
+                touchDragging.style.pointerEvents = '';
+                setTimeout(checkWin, 200);
+            } else {
+                // Return to origin
+                touchOrigin.appendChild(touchDragging);
+                touchDragging.style.position = 'static';
+                touchDragging.style.left = '';
+                touchDragging.style.top = '';
+                touchDragging.style.zIndex = '';
+                touchDragging.style.pointerEvents = '';
+            }
+            touchDragging = null;
+            touchOrigin = null;
+        }
+        // Attach touch events to all pieces after rendering
+        function enableTouchOnPieces() {
+            document.querySelectorAll('.jigsaw-piece').forEach(piece => {
+                piece.ontouchstart = onTouchStart;
+                piece.ontouchmove = onTouchMove;
+                piece.ontouchend = onTouchEnd;
+            });
+        }
+        enableTouchOnPieces();
+        // Re-enable after every render (if you add a shuffle button, etc)
+        // If you ever re-render, call enableTouchOnPieces();
+        // Drag and drop logic for board-only swap
+        let dragging = null;
+        let dragOrigin = null;
+        function onDragStart(e) {
+            if(e.target.classList.contains('jigsaw-piece')) {
+                dragging = e.target;
+                dragOrigin = e.target.parentElement;
+                setTimeout(()=>dragging.classList.add('dragging'),0);
+            }
+        }
+        function onDragEnd(e) {
+            if(dragging) dragging.classList.remove('dragging');
+            dragging = null;
+            dragOrigin = null;
+        }
+        board.addEventListener('dragstart', onDragStart);
+        board.addEventListener('dragend', onDragEnd);
+        board.addEventListener('dragover', e => { e.preventDefault(); });
+        board.addEventListener('drop', e => {
+            if(!dragging) return;
+            const drop = e.target.closest('.jigsaw-drop');
+            if(!drop || drop === dragOrigin) return;
+            if(drop.children.length) {
+                // Swap pieces
+                const targetPiece = drop.children[0];
+                dragOrigin.appendChild(targetPiece);
+            }
+            drop.appendChild(dragging);
+            dragging.style.position = 'static';
+            dragging.draggable = true;
+            dragging.classList.remove('dragging');
+            setTimeout(checkWin, 200);
+        });
+        // Confetti animation
+        function showConfetti() {
+            const confettiColors = ['#e75480','#ffb6c1','#fff','#f9c6d1','#b23a48','#f7a072'];
+            const confettiCount = 48;
+            for(let i=0;i<confettiCount;i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+                conf.style.left = (Math.random()*100) + '%';
+                conf.style.animationDelay = (Math.random()*0.7)+'s';
+                conf.style.transform = `scale(${0.7+Math.random()*0.7}) rotate(${Math.random()*360}deg)`;
+                document.body.appendChild(conf);
+                setTimeout(()=>conf.remove(), 1800);
+            }
+        }
+
+        function checkWin() {
+            let correct = 0;
+            board.querySelectorAll('.jigsaw-drop').forEach(drop => {
+                if(drop.children.length) {
+                    const piece = drop.children[0];
+                    if(piece.dataset.row == drop.dataset.row && piece.dataset.col == drop.dataset.col) correct++;
+                }
+            });
+            if(correct === SIZE*SIZE) {
+                statusDiv.innerHTML = '<span style="font-size:1.3em;color:#e75480;font-family:Pacifico,cursive;">Congratulations!<br>My pyaari winner! 🏆💖<br><span style="font-size:0.9em;font-family:Quicksand,Arial,sans-serif;">You completed the puzzle!<br>Love you always!</span></span>';
+                // Join the pieces visually
+                joinPuzzlePieces();
+                showConfetti();
+                // Show and scroll to congrats message after a short delay
+                setTimeout(() => {
+                    document.getElementById('normalFooter').style.display = 'none';
+                    document.getElementById('congratsFooter').style.display = 'block';
+                    document.getElementById('congratsFooter').scrollIntoView({behavior:'smooth', block:'center'});
+                    setTimeout(() => {
+                        alert('Yay! You completed the puzzle! You are the best! 💖');
+                        window.location.href = 'gallery.html';
+                    }, 3500);
+                }, 1200);
+            }
+        }
+
+        // Visually join the puzzle pieces into a single image
+        function joinPuzzlePieces() {
+            // Remove all pieces and drops, add one big image in their place
+            setTimeout(() => {
+                // Remove all children from board
+                while (board.firstChild) board.removeChild(board.firstChild);
+                // Set board size exactly to puzzle size
+                board.style.width = (PIECE * SIZE) + 'px';
+                board.style.height = (PIECE * SIZE) + 'px';
+                board.style.display = 'flex';
+                board.style.alignItems = 'center';
+                board.style.justifyContent = 'center';
+                const img = document.createElement('img');
+                img.src = IMG_URL;
+                img.alt = 'Completed Puzzle';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.borderRadius = '16px';
+                img.style.boxShadow = '0 2px 12px #e7548033';
+                img.style.display = 'block';
+                img.style.objectFit = 'cover';
+                img.style.animation = 'popin 1s cubic-bezier(0.77,0,0.175,1)';
+                board.appendChild(img);
+            }, 400);
+        }
+        // On page load, scroll to top, then after a short delay, scroll to puzzle
+        window.addEventListener('DOMContentLoaded', function() {
+            window.scrollTo({top: 0, behavior: 'auto'});
+            setTimeout(function() {
+                var puzzleCard = document.querySelector('.puzzle-card');
+                if (puzzleCard) {
+                    puzzleCard.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }
+            }, 700);
+        });
+    </script>
+    <style>
+    .confetti {
+        position: fixed;
+        top: -24px;
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        opacity: 0.85;
+        z-index: 9999;
+        pointer-events: none;
+        animation: confetti-fall 1.5s cubic-bezier(.6,.2,.4,1.1) forwards;
+    }
+    @keyframes confetti-fall {
+        0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+        80% { opacity: 1; }
+        100% { transform: translateY(90vh) scale(1) rotate(360deg); opacity: 0; }
+    }
+    </style>
+</body>
+</html>

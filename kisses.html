@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | For My Wife</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(120deg, #ffe0e9 0%, #ffb6c1 100%) fixed;
+            font-family: 'Quicksand', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-card {
+            background: rgba(255,255,255,0.92);
+            border-radius: 22px;
+            box-shadow: 0 8px 32px #e7548033, 0 2px 16px #fff6;
+            padding: 1.3em 1.2em 1.1em 1.2em;
+            max-width: 320px;
+            text-align: center;
+            margin-top: 1.2em;
+            position: relative;
+        }
+        .main-card::before {
+            content: '💖';
+            font-size: 2.5rem;
+            position: absolute;
+            top: -1.2em;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 2px 8px #e75480cc);
+        }
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #e75480;
+            font-size: 2.7rem;
+            margin-bottom: 0.2em;
+            margin-top: 0.2em;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 16px #fff8, 0 2px 8px #e75480cc;
+        }
+        .subtitle {
+            color: #ff6a88;
+            font-size: 1.2rem;
+            margin-bottom: 1.5em;
+            font-family: 'Quicksand', Arial, sans-serif;
+        }
+        .photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #e75480;
+            margin-bottom: 1.2em;
+            box-shadow: 0 2px 16px #e7548033;
+        }
+        .message {
+            font-size: 1.1rem;
+            color: #b23a48;
+            margin-bottom: 1.5em;
+            font-family: 'Quicksand', Arial, sans-serif;
+        }
+        .footer {
+            margin-top: 2em;
+            color: #e75480;
+            font-size: 1rem;
+            opacity: 0.7;
+            font-family: 'Quicksand', Arial, sans-serif;
+        }
+        @media (max-width: 600px) {
+            .main-card { padding: 0.7em 0.2em; max-width: 96vw; }
+            h1 { font-size: 1.3rem; }
+            .photo { width: 64px; height: 64px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <img src="https://scontent.fccu2-2.fna.fbcdn.net/v/t1.15752-9/495076707_488868327608787_8477084029246148782_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=IOZpMcLfHlgQ7kNvwHrlXHr&_nc_oc=AdkQO3X5o3PE7OCiE_ln173Jn0xkS3vJPYEwnYgO6FPQf1tAGze6KsGvCO6uZxV8fqU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fccu2-2.fna&oh=03_Q7cD2gGkY3kW4Soe6KXKKNDF5P5jj2IaJaXYaUqhm1UlhAJrwg&oe=688B724F" alt="Wife Photo" class="photo">
+        <h1>Welcome, My Love!</h1>
+        <div class="subtitle">This page is just for you, meri pyaari wife 💕</div>
+        <div class="message">
+            You are the light of my life and the reason for my smile every day.<br>
+            I am so grateful for you.<br>
+            <span style="font-size:1.5em;">❤️</span>
+        </div>
+
+        <button id="nextPageBtn" style="display:none;margin-top:1.5em;background:linear-gradient(90deg,#e75480 0%,#ffb6c1 100%);color:#fff;border:none;border-radius:8px;padding:0.7em 2em;font-size:1.1rem;font-family:'Quicksand',Arial,sans-serif;cursor:pointer;font-weight:600;box-shadow:0 2px 8px #e7548033;transition:background 0.2s;animation:pulseBtn 1.2s infinite alternate;">See Surprise</button>
+
+        <style>
+        @keyframes pulseBtn {
+            0% { transform: scale(1); box-shadow: 0 2px 8px #e75480cc; }
+            100% { transform: scale(1.08); box-shadow: 0 8px 32px #e75480cc; }
+        }
+        @keyframes appearPop {
+            0% { opacity: 0; transform: scale(0.7) translateY(30px); }
+            60% { opacity: 1; transform: scale(1.08) translateY(-8px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        #nextPageBtn.appear {
+            animation: appearPop 0.7s cubic-bezier(0.77,0,0.175,1);
+        }
+        #nextPageBtn:hover {
+            background: linear-gradient(90deg, #ffb6c1 0%, #e75480 100%);
+        }
+        </style>
+    </div>
+    <div class="footer">Made with endless love by your partner</div>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('nextPageBtn');
+            setTimeout(function() {
+                if(btn) {
+                    btn.style.display = 'inline-block';
+                    btn.classList.add('appear');
+                }
+            }, 2000);
+            if(btn) btn.addEventListener('click', function() {
+                window.location.href = 'surprise.html';
+            });
+        });
+    </script>
+</body>
+</html>
+
